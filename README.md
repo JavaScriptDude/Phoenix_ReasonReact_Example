@@ -3,13 +3,13 @@ Note: This document is a copy of a [Blogspot article by Criag Code](https://crai
 
 ### Phoenix + ReasonReact - Full-Stack Functional Programming
 
-As I started designing a new web application project, I had the wonderful opportunity to choose which technologies to use to power it. Like many other developers, I have seen the technical debt that is inherent to some of the [potential choices](https://www.youtube.com/watch?v=bzkRVzciAZg), so I decided to take a step back and objectively evaluate which technologies would work best for this specific project. Based on [an interview with Jesper Louis Anderson](https://notamonadtutorial.com/interview-with-jesper-louis-andersen-about-erlang-haskell-ocaml-go-idris-the-jvm-software-and-b0de06440fbd), I decided to consider [functional programming languages](https://en.wikipedia.org/wiki/Functional_programming) as a starting point since they are the most “agile” types of languages.  
+As I started designing a new web application project, I had the wonderful opportunity to choose which technologies to use to power it. Like many other developers, I have seen the technical debt that is inherent to some of the [potential choices](https://www.youtube.com/watch?v=bzkRVzciAZg), so I decided to take a step back and objectively evaluate which technologies would work best for this specific project. Based on [an interview with Jesper Louis Anderson](https://notamonadtutorial.com/interview-with-jesper-louis-andersen-about-erlang-haskell-ocaml-go-idris-the-jvm-software-and-b0de06440fbd), I decided to consider [functional programming languages](https://en.wikipedia.org/wiki/Functional_programming) as a starting point since they are the most "agile" types of languages.  
 
 For the backend web server, I wanted to use a functional programming language, but I wasn’t ready to give up all of the niceties of [Rails](https://rubyonrails.org/) (convention over configuration, generators, ActiveRecord). This led me to the [Phoenix Framework](https://phoenixframework.org/), which is basically Rails, but instead of running on Ruby, it runs on [Elixir](https://elixir-lang.org/) in the [Erlang RunTime System](https://www.erlang.org/). This means that I get all of the niceties of Rails with all the [power of the Erlang RunTime System and OTP](https://stackoverflow.com/questions/8426897/erlangs-99-9999999-nine-nines-reliability) (fast, scalable, reliable). The choice was easy.  
 
 For the client, I wanted to use [static typing](https://www.typescriptlang.org/), [immutability](https://facebook.github.io/immutable-js/), and [composable components](https://reactjs.org/), but I didn’t want the complexities of handling a different dependency for each of these criteria. That’s when I found [ReasonML](https://reasonml.github.io/). ReasonML is basically a re-skinned syntax of [OCaml](https://ocaml.org/) to make it look more like JavaScript and less like a scary functional programming language. Out of the box, ReasonML provides static typing, immutability, and other useful functional programming features ([Variants are pretty great!](https://reasonml.github.io/docs/en/variant)). Also, since ReasonML is also developed by Facebook developers, [the project is very closely tied with React](https://reasonml.github.io/reason-react/). Good enough for me!  
 
-Now that I chose the winning team of technologies to use, my next step was to “google” all of the technologies together to see if someone has already written a blog post on how to wire them all up together. Unfortunately, even though these two technologies (Phoenix and ReasonReact) are awesome, they are still fairly new and haven’t yet gotten an invitation to the “popular web technologies” club, so I was left to wiring up the two technologies together myself. To help you, humble reader, from also not finding any results on using these two technologies together, I have put together this post to show you how I managed to get the two working together quite nicely.  
+Now that I chose the winning team of technologies to use, my next step was to "google" all of the technologies together to see if someone has already written a blog post on how to wire them all up together. Unfortunately, even though these two technologies (Phoenix and ReasonReact) are awesome, they are still fairly new and haven’t yet gotten an invitation to the "popular web technologies" club, so I was left to wiring up the two technologies together myself. To help you, humble reader, from also not finding any results on using these two technologies together, I have put together this post to show you how I managed to get the two working together quite nicely.  
 
 **So if you are ready to harness the awesome power of the Phoenix Framework as your server and ReasonReact as your client, please read on.** (To get spoilers for this post, [follow along with the complete code here](https://github.com/ctbucha/phoenix-reasonreact-example)).  
 
@@ -113,9 +113,9 @@ If you are familiar with Rails generators, then you will be right at home here. 
        $ iex -S mix phx.server  
 ```
 
-This command will create a new Phoenix project called “myapp” in the “myapp” directory. The “--no-ecto” flag tells the Phoenix generator not to include Ecto. Ecto is basically the persistence layer of a Phoenix application, and it allows your app to communicate with a backend database (for Rails developers, think ActiveRecord). Since we are just creating a simple frontend application, we are purposely keeping the application simple by not spinning up a database. If you need a database for your application, you can omit the “--no-ecto” flag, set up a database, and continue to follow along with this tutorial. If you want to see more details about the “mix phx.new” command, check out the great [Phoenix Up and Running guide](https://hexdocs.pm/phoenix/up_and_running.html).
+This command will create a new Phoenix project called "myapp" in the "myapp" directory. The "--no-ecto" flag tells the Phoenix generator not to include Ecto. Ecto is basically the persistence layer of a Phoenix application, and it allows your app to communicate with a backend database (for Rails developers, think ActiveRecord). Since we are just creating a simple frontend application, we are purposely keeping the application simple by not spinning up a database. If you need a database for your application, you can omit the "--no-ecto" flag, set up a database, and continue to follow along with this tutorial. If you want to see more details about the "mix phx.new" command, check out the great [Phoenix Up and Running guide](https://hexdocs.pm/phoenix/up_and_running.html).
 
-The “mix phx.new” command will also prompt you to fetch and install dependencies. That is fine.
+The `mix phx.new` command will also prompt you to fetch and install dependencies. That is fine.
 
 To test out if the application is working correctly, run the following commands:
 ```
@@ -133,8 +133,8 @@ ReasonReact is basically React, but written in ReasonML instead of Javascript. R
 To get ReasonReact to run in the browser, however, we are going to need to compile the ReasonML code into JavaScript. That is where [Bucklescript](https://bucklescript.github.io/) comes in. To install the necessary ReasonReact dependencies in our project, run the following commands:
 ```
      cd assets  
-     npm install —save-dev bs-platform # this will likely need take a couple of minutes to run the first time  
-     npm install —save react react-dom reason-react  
+     npm install --save-dev bs-platform # this will likely need take a couple of minutes to run the first time  
+     npm install --save react react-dom reason-react  
 ```
 
 Now that ReasonReact is installed into the project, let’s create a small ReasonReact component that will get rendered on the home page of the application. Add the following files to your project (borrowed from the [reason-react-example project](https://github.com/reasonml-community/reason-react-example/tree/master/src/simple)):
@@ -180,8 +180,16 @@ Then add the following bucklescript configuration file to the assets directory:
      }  
 ```
 
-And add the following commands to “scripts” in the assets/package.json file:
+And add the following commands to "scripts" in the assets/package.json file:
 
+```
+      ...  
+      modules: {  
+       autoRequire: {  
+```
+      ...  
+      modules: {  
+       autoRequire: {  
 `myapp/assets/package.json`
 ```
       ...  
@@ -191,7 +199,7 @@ And add the following commands to “scripts” in the assets/package.json file:
        "clean": "bsb -clean-world",  
        ...  
 ```
-This will allow us to run the Bucklescript commands through npm. To make sure everything is installed and working correctly, “cd” into your “assets” directory and run the following command to build your ReasonReact component:  
+This will allow us to run the Bucklescript commands through npm. To make sure everything is installed and working correctly, "cd" into your "assets" directory and run the following command to build your ReasonReact component:  
 ```
      npm run build  
 ```
@@ -200,7 +208,7 @@ If everything is working correctly, Bucklescript will compile all of the ReasonM
 
 Now we have the JavaScript files, but how do we get them to actually run in any of the web pages served through the Phoenix web app? To accomplish this, we only need to make a few more changes.
 
-By default, a Phoenix web app uses [brunch](https://brunch.io/) as the JavaScript build system (instead of [webpack](https://webpack.js.org/), [gulp](https://gulpjs.com/), [grunt](https://gruntjs.com/), etc.), so we’ll stick with that. Open up the assets/brunch-config.js file and add the JavaScript file of the root React component generated by Bucklescript to the “modules/autoRequire” object. This will make brunch build the final JavaScript package to run the ReactComponent when it gets loaded into the browser. Otherwise, the React component code will be bundled with the final JavaScript file, but it won’t be executed when it gets loaded into the browser.
+By default, a Phoenix web app uses [brunch](https://brunch.io/) as the JavaScript build system (instead of [webpack](https://webpack.js.org/), [gulp](https://gulpjs.com/), [grunt](https://gruntjs.com/), etc.), so we’ll stick with that. Open up the assets/brunch-config.js file and add the JavaScript file of the root React component generated by Bucklescript to the "modules/autoRequire" object. This will make brunch build the final JavaScript package to run the ReactComponent when it gets loaded into the browser. Otherwise, the React component code will be bundled with the final JavaScript file, but it won’t be executed when it gets loaded into the browser.
 
 `myapp/assets/brunch-config.js`
 ```
@@ -213,21 +221,21 @@ By default, a Phoenix web app uses [brunch](https://brunch.io/) as the JavaScrip
       ...  
 ```
 
-Now, the last step of displaying the React component in a web page served by the Phoenix web app is to create a “div” tag with the “id” of “index” so that the React component will know where to attach. We will do this by editing the default template created with the Phoenix web app. Delete all of the contents in the lib/myapp_web/templates/page/index.html.eex file and replace them with the following:
+Now, the last step of displaying the React component in a web page served by the Phoenix web app is to create a "div" tag with the "id" of "index" so that the React component will know where to attach. We will do this by editing the default template created with the Phoenix web app. Delete all of the contents in the lib/myapp_web/templates/page/index.html.eex file and replace them with the following:
 
 `myapp/lib/myapp_web/templates/page/index.html.eex`
 ```
-      <div id=“index”></div>  
+      <div id="index"></div>  
 ```
 
 Save this file and start up the Phoenix server again with mix phx.server in the root directory of the project (if it’s not already running). Load up the page in your favorite web browser again (http://localhost:4000), and if everything worked correctly, you should now see the React component displayed beneath the default Phoenix header. If this worked, then you are now running a ReasonReact client from a Phoenix web application! Great job! 
 
 ## Hot-loading ReasonReact
 
-So one thing you know as a developer is you are not going to write the code once, compile it, and be done forever (unless you are a perfect programmer who can foresee all future requirements of the system 🔮). You are going to be constantly changing the ReasonReact code and seeing how it affects your application. To reduce the time it takes to write the code, save the code, compile the code, restart the server, write the code, save the code, and so on, you’ve likely used hot-reloading. Hot-reloading is when your development environment watches your code for changes, and then automatically compiles and redeploys the changes to your development server and you can immediately see the impact of the code you are currently working on. Luckily, Phoenix does this automatically with both the Elixir code in the “lib” directory and client code in the “assets” directory when you run the “mix phx.server” command. E.g. if you change (and save) and Elixir file in lib/myapp_web/controllers or a JavaScript file in assets/js/, then the changes will automatically be updated in your running development server. Awesome, right? Well what about ReasonML code? Phoenix doesn’t watch or update this code automatically. Bummer.
+So one thing you know as a developer is you are not going to write the code once, compile it, and be done forever (unless you are a perfect programmer who can foresee all future requirements of the system 🔮). You are going to be constantly changing the ReasonReact code and seeing how it affects your application. To reduce the time it takes to write the code, save the code, compile the code, restart the server, write the code, save the code, and so on, you’ve likely used hot-reloading. Hot-reloading is when your development environment watches your code for changes, and then automatically compiles and redeploys the changes to your development server and you can immediately see the impact of the code you are currently working on. Luckily, Phoenix does this automatically with both the Elixir code in the "lib" directory and client code in the "assets" directory when you run the "mix phx.server" command. E.g. if you change (and save) and Elixir file in lib/myapp_web/controllers or a JavaScript file in assets/js/, then the changes will automatically be updated in your running development server. Awesome, right? Well what about ReasonML code? Phoenix doesn’t watch or update this code automatically. Bummer.
 
 
-However, since Phoenix is watching for changes in JavaScript files in assets/js/, and when we make changes to the ReasonML files and compile them into JavaScript with Bucklescript, then Phoenix *does* see the updated JavaScript files and automatically hot-reloads them into your running development server. So all we have to do is have Bucklescript watch for changes to our ReasonML files and automatically compile the new JavaScript files when it sees changes. Fortunately, we already added this command to our assets/package.json file as the “start” script. If you run “npm run start” from the “assets” directory, then Bucklescript starts in “watch” mode, so it will automatically compile any ReasonML changes into JavaScript, Phoenix will see the changes to the generated JavaScript files and automatically hot-reload them into the running development server. Great! 
+However, since Phoenix is watching for changes in JavaScript files in assets/js/, and when we make changes to the ReasonML files and compile them into JavaScript with Bucklescript, then Phoenix *does* see the updated JavaScript files and automatically hot-reloads them into your running development server. So all we have to do is have Bucklescript watch for changes to our ReasonML files and automatically compile the new JavaScript files when it sees changes. Fortunately, we already added this command to our assets/package.json file as the "start" script. If you run "npm run start" from the "assets" directory, then Bucklescript starts in "watch" mode, so it will automatically compile any ReasonML changes into JavaScript, Phoenix will see the changes to the generated JavaScript files and automatically hot-reload them into the running development server. Great! 
 
 So now we know we can have hot-reloading of all of our code during development (both Elixir server code and ReasonReact frontend code) with the following two commands:
 ```
@@ -256,7 +264,7 @@ Create the following file in the lib/mix/tasks directory:
      end  
 ```
 
-Now we compile the task by running “mix compile” in the root directory of our project.
+Now we compile the task by running "mix compile" in the root directory of our project.
 ```
      mix compile  
 ```
