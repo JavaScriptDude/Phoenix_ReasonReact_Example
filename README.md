@@ -1,4 +1,4 @@
-Note: This document is a copy of a [Blogspot article by Criag Code](https://craigc0de.blogspot.com/2018/07/phoenix-reasonreact-full-stack.html). This version contains corrections to the sample code as well as how to get it working with a more modern version of Ubuntu.
+Note: This document is a copy of a [Blogspot article by Criag Code](https://craigc0de.blogspot.com/2018/07/phoenix-reasonreact-full-stack.html). This version contains corrections to the inline code as well as how to get it working with a more modern version of Ubuntu. Big difference with my experience is that Phenix uses webpack and the instructions below reflect this.
 
 
 ### Phoenix + ReasonReact - Full-Stack Functional Programming
